@@ -11,7 +11,6 @@ import { Text, Colors } from 'react-native-ui-lib';
 
 import ButtonNext from './ButtonNext';
 
-
 interface PropsPage {
   title: string,
   desc: string,
@@ -93,6 +92,7 @@ const PageItem = ({ title, desc }: PropsPage) => {
 
 
 const Welcome = () => {
+
   return (
     <View style={styles.container}>
       <ScrollView

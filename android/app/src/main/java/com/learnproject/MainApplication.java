@@ -13,6 +13,7 @@ import java.util.List;
 import com.facebook.react.bridge.JSIModulePackage; // <- add
 import com.swmansion.reanimated.ReanimatedJSIModulePackage; 
 import androidx.multidex.MultiDexApplication; 
+import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
 
 public class MainApplication extends MultiDexApplication  implements ReactApplication {
 
