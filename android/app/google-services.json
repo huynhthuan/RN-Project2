@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "976240824230",
+    "project_id": "mindx-learnrn",
+    "storage_bucket": "mindx-learnrn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976240824230:android:3673f8c5cb430d24ea8967",
+        "android_client_info": {
+          "package_name": "com.learnproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "976240824230-4fl58d4adocadvo8oaggjgg53ol55ven.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learnproject",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "976240824230-55os4ejbaik4hpslbtkng42v5u7phcab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjKzGtv4uGIeSFMbzbcrKo8BIfXkgKQXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "976240824230-55os4ejbaik4hpslbtkng42v5u7phcab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

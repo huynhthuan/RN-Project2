@@ -8,7 +8,13 @@ import {
   View,
 } from 'react-native';
 
-const InputCustom = ({icon, placeholder, keyboardType}) => {
+const InputCustom = ({
+  icon,
+  placeholder,
+  keyboardType,
+  onChangeText,
+  value,
+}) => {
   return (
     <View style={styles.formGroup}>
       <View style={styles.formIcon}>
@@ -17,7 +23,9 @@ const InputCustom = ({icon, placeholder, keyboardType}) => {
       <TextInput
         style={styles.input}
         placeholder={placeholder}
-        keyboardType={keyboardType}></TextInput>
+        keyboardType={keyboardType}
+        onChangeText={onChangeText}
+        value={value}></TextInput>
       {keyboardType === 'visible-password' ? (
         <TouchableOpacity style={styles.viewPassWord}>
           <Image source={require('../assets/icon/eye.png')}></Image>
@@ -39,7 +47,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#C1C7D0',
     borderBottomWidth: 1,
     borderStyle: 'solid',
-    marginBottom: 36
+    marginBottom: 36,
   },
   formIcon: {
     width: 36,

@@ -1,12 +1,14 @@
 /**
  * @format
  */
-
+import 'react-native-gesture-handler';
 import {AppRegistry} from 'react-native';
 import App from './App';
-import SplashScreen from './src/screen/SplashScreen';
-import Welcome from './src/screen/Welcome';
-import Authorization from './src/screen/Authorization';
 import {name as appName} from './app.json';
 
-AppRegistry.registerComponent(appName, () => Authorization);
+import './src/designSystem/assets';
+import './src/designSystem/colors';
+import './src/designSystem/space';
+import './src/designSystem/typo';
+
+AppRegistry.registerComponent(appName, () => App);

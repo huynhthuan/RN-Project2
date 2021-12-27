@@ -1,13 +1,21 @@
 import React from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   ScrollView,
   Dimensions,
-  Image,
-  TouchableOpacity,
+  Animated
 } from 'react-native';
+
+import { Text, Colors } from 'react-native-ui-lib';
+
+import ButtonNext from './ButtonNext';
+
+
+interface PropsPage {
+  title: string,
+  desc: string,
+}
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -27,13 +35,53 @@ const PageData = [
   },
 ];
 
-const PageItem = ({title, desc}) => {
+const PageItem = ({ title, desc }: PropsPage) => {
+  // const opacityValue = React.useRef(new Animated.Value(0)).current;
+
+  // React.useEffect(() => {
+  //   Animated.loop(
+  //     Animated.timing(opacityValue, {
+  //       toValue: 1,
+  //       duration: 5000,
+  //       useNativeDriver: true
+  //     }),
+  //     {
+  //       iterations: 1
+  //     }
+  //   ).start();
+  // }, []);
+
+  const startAnimation = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    const animStart = Animated.timing(startAnimation, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true
+    })
+
+    animStart.start();
+  }, [])
+
   return (
     <View style={styles.page}>
       <View style={styles.pageImageWrap}>
-        <Image
-          style={styles.pageImage}
-          source={require('../../assets/img/logo.png')}></Image>
+        <Animated.Image
+          style={{
+            opacity: startAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 1]
+            }),
+            transform: [
+              {
+                scale: startAnimation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0.5, 1]
+                })
+              }
+            ]
+          }}
+          source={require('../../assets/img/logo.png')} />
       </View>
       <View style={styles.pageMeta}>
         <Text style={styles.textImage}>{title}</Text>
@@ -42,6 +90,7 @@ const PageItem = ({title, desc}) => {
     </View>
   );
 };
+
 
 const Welcome = () => {
   return (
@@ -60,9 +109,7 @@ const Welcome = () => {
           );
         })}
       </ScrollView>
-      <TouchableOpacity style={styles.btnNext}>
-        <Image source={require('../../assets/icon/arrow-right.png')}></Image>
-      </TouchableOpacity>
+      <ButtonNext />
       <View style={styles.dotsWrap}>
         <View style={[styles.dot, styles.active]}></View>
         <View style={styles.dot}></View>
@@ -92,7 +139,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
   },
-  pageImage: {},
+  pageImage: {
+
+  },
   pageMeta: {
     width: width,
     flex: 1,
@@ -102,22 +151,12 @@ const styles = StyleSheet.create({
   textImage: {
     fontSize: 28,
     textAlign: 'center',
+    fontFamily: 'Poppins-Regular'
   },
   desImage: {
     fontSize: 18,
     color: '#AAAAAA',
     textAlign: 'center',
-  },
-  btnNext: {
-    width: 60,
-    height: 60,
-    borderRadius: 60,
-    backgroundColor: '#324A59',
-    position: 'absolute',
-    right: 20,
-    bottom: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   dotsWrap: {
     width: 100,

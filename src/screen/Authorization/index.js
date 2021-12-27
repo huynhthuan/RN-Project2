@@ -1,12 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
-import Header from '../../components/Header';
 import InputCustom from '../../components/InputCustom';
 
-const Authorization = () => {
+const Authorization = ({navigation}) => {
   return (
     <View style={styles.appWrap}>
-      <Header contentRight={<></>}></Header>
       <View style={styles.appContent}>
         <View style={styles.appInner}>
           <View style={styles.form}>
@@ -32,12 +30,19 @@ const Authorization = () => {
                 styles.textActive,
                 styles.textCenter,
                 styles.textForm,
-              ]}>
+              ]}
+              onPress={() => {
+                navigation.navigate('ForgotPassword');
+              }}>
               Забыли пароль?
             </Text>
           </View>
           <View style={styles.appBtn}>
-            <TouchableOpacity style={styles.btnNext}>
+            <TouchableOpacity
+              style={styles.btnNext}
+              onPress={() => {
+                navigation.navigate('ForgotPassword');
+              }}>
               <Image
                 source={require('../../assets/icon/arrow-right.png')}></Image>
             </TouchableOpacity>
@@ -46,7 +51,11 @@ const Authorization = () => {
         <View style={styles.appFooter}>
           <Text style={[styles.text, styles.textDisable]}>
             Впервые?{' '}
-            <Text style={[styles.text, styles.textActive]}>
+            <Text
+              style={[styles.text, styles.textActive]}
+              onPress={() => {
+                navigation.navigate('Registration');
+              }}>
               Зарегистрироваться.
             </Text>
           </Text>
@@ -61,10 +70,12 @@ export default Authorization;
 const styles = StyleSheet.create({
   appWrap: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   appContent: {
     paddingHorizontal: 40,
     paddingBottom: 71,
+    paddingTop: 70,
     justifyContent: 'space-between',
     flex: 1,
   },
