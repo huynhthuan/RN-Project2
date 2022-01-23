@@ -1,19 +1,24 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  Dimensions,
-  Animated
-} from 'react-native';
+import {StyleSheet, View, ScrollView, Dimensions, Animated} from 'react-native';
 
-import { Text, Colors } from 'react-native-ui-lib';
+import Config from 'react-native-config';
+
+import {Text, Colors, Button, TextField} from 'react-native-ui-lib';
 
 import ButtonNext from './ButtonNext';
 
+import {AppDispatch, RootState} from '../../controller/store';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  decrementByAmount,
+  decremented,
+  incrementByAmount,
+  incremented,
+} from '../../controller/counterSlice';
+
 interface PropsPage {
-  title: string,
-  desc: string,
+  title: string;
+  desc: string;
 }
 
 const width = Dimensions.get('window').width;
@@ -34,7 +39,7 @@ const PageData = [
   },
 ];
 
-const PageItem = ({ title, desc }: PropsPage) => {
+const PageItem = ({title, desc}: PropsPage) => {
   // const opacityValue = React.useRef(new Animated.Value(0)).current;
 
   // React.useEffect(() => {
@@ -56,11 +61,11 @@ const PageItem = ({ title, desc }: PropsPage) => {
     const animStart = Animated.timing(startAnimation, {
       toValue: 1,
       duration: 1000,
-      useNativeDriver: true
-    })
+      useNativeDriver: true,
+    });
 
     animStart.start();
-  }, [])
+  }, []);
 
   return (
     <View style={styles.page}>
@@ -69,18 +74,19 @@ const PageItem = ({ title, desc }: PropsPage) => {
           style={{
             opacity: startAnimation.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, 1]
+              outputRange: [0, 1],
             }),
             transform: [
               {
                 scale: startAnimation.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0.5, 1]
-                })
-              }
-            ]
+                  outputRange: [0.5, 1],
+                }),
+              },
+            ],
           }}
-          source={require('../../assets/img/logo.png')} />
+          source={require('../../assets/img/logo.png')}
+        />
       </View>
       <View style={styles.pageMeta}>
         <Text style={styles.textImage}>{title}</Text>
@@ -90,8 +96,12 @@ const PageItem = ({ title, desc }: PropsPage) => {
   );
 };
 
+console.log(Config.ENVIRONMENT);
 
 const Welcome = () => {
+  const counter = useSelector((state: RootState) => state.counterSlice);
+  const dispatch = useDispatch<AppDispatch>();
+  console.log('re render');
 
   return (
     <View style={styles.container}>
@@ -110,6 +120,38 @@ const Welcome = () => {
         })}
       </ScrollView>
       <ButtonNext />
+      <Text
+        marginB-10
+        style={{
+          color: 'black',
+          width: 100,
+          backgroundColor: 'red',
+          flex: 1,
+        }}>
+        {Config.ENVIRONMENT}
+      </Text>
+      <Text center b36> {counter.value}</Text>
+      <Button onPress={() => dispatch(incremented())} marginB-10>
+        <Text white b20>
+          +
+        </Text>
+      </Button>
+      <Button onPress={() => dispatch(decremented())} marginB-10>
+        <Text white b20>
+          -
+        </Text>
+      </Button>
+      <Button onPress={() => dispatch(incrementByAmount(14))} marginB-10>
+        <Text white b20>
+          Increase by amount
+        </Text>
+      </Button>
+      <Button onPress={() => dispatch(decrementByAmount(40))} marginB-10>
+        <Text white b20>
+          Decreasement by amount
+        </Text>
+      </Button>
+
       <View style={styles.dotsWrap}>
         <View style={[styles.dot, styles.active]}></View>
         <View style={styles.dot}></View>
@@ -139,9 +181,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
   },
-  pageImage: {
-
-  },
+  pageImage: {},
   pageMeta: {
     width: width,
     flex: 1,
@@ -151,7 +191,7 @@ const styles = StyleSheet.create({
   textImage: {
     fontSize: 28,
     textAlign: 'center',
-    fontFamily: 'Poppins-Regular'
+    fontFamily: 'Poppins-Regular',
   },
   desImage: {
     fontSize: 18,

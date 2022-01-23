@@ -1,7 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Menu, { IDataCoffee } from '../../screen/Menu';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Menu, {IDataCoffee} from '../../screen/Menu';
 import OrderOption from '../../screen/OrderOption';
 import Barista from '../../screen/Barista';
 import CoffeeCountry from '../../screen/CoffeeCountry';
@@ -10,20 +10,22 @@ import Additives from '../../screen/Additives';
 import Desginer from '../../screen/Desginer';
 import Recommentaion from '../../screen/Recommentation';
 import MyOrder from '../../screen/MyOrder';
-import { useRoute } from '@react-navigation/core';
-import { RootStackParamList } from '../../../App';
+import {useRoute} from '@react-navigation/core';
+import {RootStackParamList} from '../../../App';
+import CreateProduct from '../../screen/CreateProduct';
 
 export type StoreStackParamList = {
-  Menu: undefined,
+  Menu: undefined;
   OrderOption: {
-    item: IDataCoffee | undefined
-  },
-  Barista: undefined,
-  CoffeeCountry: undefined,
-  CoffeeType: undefined,
-  Additives: undefined,
-  Desginer: undefined,
-  Recommentaion: undefined,
+    item: IDataCoffee | undefined;
+  };
+  Barista: undefined;
+  CoffeeCountry: undefined;
+  CoffeeType: undefined;
+  Additives: undefined;
+  Desginer: undefined;
+  Recommentaion: undefined;
+  CreateProduct: undefined;
 };
 
 const Stack = createNativeStackNavigator<StoreStackParamList>();
@@ -54,7 +56,7 @@ const MenuStack = () => {
       <Stack.Screen
         name="OrderOption"
         component={OrderOption}
-        options={({ navigation, route }) => {
+        options={({navigation, route}) => {
           return {
             headerShadowVisible: false,
             title: route?.params?.item?.title,
@@ -106,6 +108,14 @@ const MenuStack = () => {
         component={Recommentaion}
         options={{
           title: 'Конструктор кофемана',
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="CreateProduct"
+        component={CreateProduct}
+        options={{
+          title: 'CreateProduct',
           headerShadowVisible: false,
         }}
       />

@@ -1,16 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   Dimensions,
+  ImageSourcePropType,
 } from 'react-native';
+import {Button, Text, TextField} from 'react-native-ui-lib';
+import {useAppDispatch, useAppSelector} from '../../controller/store';
+import {updateName} from '../../controller/userSlice';
 
 const {width, height} = Dimensions.get('window');
 
-const ProfileItem = ({icon, subtile, value}) => {
+const ProfileItem = ({
+  icon,
+  subtile,
+  value,
+}: {
+  icon: ImageSourcePropType;
+  subtile: string;
+  value: number | string;
+}) => {
   return (
     <View style={styles.profileItem}>
       <View style={styles.profileIcon}>
@@ -28,13 +39,16 @@ const ProfileItem = ({icon, subtile, value}) => {
 };
 
 const Profile = () => {
+  const userInfo = useAppSelector(state => state.userSlice.userInfo);
+  const dispatch = useAppDispatch();
+  const [name, setname] = useState<string>('');
   return (
     <View style={styles.container}>
       <View style={styles.profileForm}>
         <ProfileItem
           icon={require('../../assets/icon/user.png')}
           subtile={'Имя'}
-          value={'Алексей'}
+          value={userInfo.name}
         />
         <ProfileItem
           icon={require('../../assets/icon/phone.png')}
@@ -52,6 +66,13 @@ const Profile = () => {
           value={'г. Минск, ул. Тимирязева, 67'}
         />
       </View>
+      <TextField value={name} onChangeText={setname}></TextField>
+      <Button
+        onPress={() => {
+          dispatch(updateName(name));
+        }}>
+        <Text white>Update name</Text>
+      </Button>
       <View style={styles.profileQr}>
         <Image source={require('../../assets/icon/qr.png')}></Image>
       </View>

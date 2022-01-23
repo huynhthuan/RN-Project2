@@ -1,4 +1,5 @@
-import { NavigationProp, useNavigation } from '@react-navigation/core';
+import {NavigationProp, useNavigation} from '@react-navigation/core';
+import {EntityId} from '@reduxjs/toolkit';
 import React from 'react';
 import {
   StyleSheet,
@@ -9,10 +10,11 @@ import {
   TouchableOpacity,
   Animated,
 } from 'react-native';
-import { IDataCoffee } from '.';
-import { StoreStackParamList } from '../../nav/MenuStack';
+import {IDataCoffee} from '.';
+import {useAppSelector} from '../../controller/store';
+import {StoreStackParamList} from '../../nav/MenuStack';
 
-const { height, width } = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 const spacing = 26;
 
@@ -20,14 +22,16 @@ const widthItem = (width - spacing * 2 - 16) / 2;
 const heightItem = (widthItem / 154) * 164;
 
 interface Props {
-  item: IDataCoffee,
-  index: number
+  index: number;
+  id: EntityId;
 }
 
-const ItemMenu = ({ item, index }: Props) => {
+const ItemMenu = ({index, id}: Props) => {
   const navigation = useNavigation<NavigationProp<StoreStackParamList>>();
   const opacityValue = React.useRef(new Animated.Value(0)).current;
   const transX = React.useRef(new Animated.Value(100)).current;
+  const entitieProduct = useAppSelector(state => state.productsSlice.entities);
+  const item = entitieProduct[id];
 
   React.useEffect(() => {
     const animOpacity = Animated.timing(opacityValue, {
@@ -47,13 +51,17 @@ const ItemMenu = ({ item, index }: Props) => {
     Animated.parallel([animOpacity, animTransX]).start();
   }, []);
 
+  if (!item) return null;
+  
+  console.log(item);
+
   return (
     <Animated.View
       style={[
         styles.container,
         {
-          opacity: opacityValue
-        }
+          opacity: opacityValue,
+        },
       ]}>
       <TouchableOpacity
         onPress={() => {
@@ -62,8 +70,8 @@ const ItemMenu = ({ item, index }: Props) => {
           });
         }}
         style={styles.content}>
-        <Image source={item.image} style={styles.image}></Image>
-        <Text style={styles.name}>{item.title}</Text>
+        <Image source={{uri: item.avatar}} style={styles.image}></Image>
+        <Text style={styles.name}>{item.name}</Text>
       </TouchableOpacity>
     </Animated.View>
   );
@@ -88,6 +96,8 @@ const styles = StyleSheet.create({
   },
   image: {
     marginBottom: 12,
+    width: 100,
+    height: 100,
   },
   name: {
     fontSize: 14,

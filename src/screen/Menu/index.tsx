@@ -1,5 +1,5 @@
-import { useNavigation } from '@react-navigation/core';
-import React from 'react';
+import {NavigationProp, useNavigation} from '@react-navigation/core';
+import React, {useState} from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -12,95 +12,51 @@ import {
   ImageSourcePropType,
   ActivityIndicator,
 } from 'react-native';
-import { RootStackParamList } from '../../../App';
+import {RootStackParamList} from '../../../App';
+import api from '../../api';
+import {productsReceived} from '../../controller/productStoreSlice';
+import {useAppDispatch, useAppSelector} from '../../controller/store';
+import {StoreStackParamList} from '../../nav/MenuStack';
 
 export interface IDataCoffee {
-  id: string,
-  title: string,
-  image: ImageSourcePropType
+  id: string;
+  name: string;
+  avatar: ImageSourcePropType;
 }
 
-const { height, width } = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 const spacing = 26;
 
 const widthItem = (width - spacing * 2 - 16) / 2;
 const heightItem = (widthItem / 154) * 164;
 
-const dataCoffee = [
-  {
-    id: '0',
-    title: 'Американо1',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-  {
-    id: '1',
-    title: 'Американо2',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-  {
-    id: '2',
-    title: 'Американо3',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-  {
-    id: '3',
-    title: 'Американо4',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-  {
-    id: '4',
-    title: 'Американо5',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-  {
-    id: '5',
-    title: 'Американо6',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-  {
-    id: '6',
-    title: 'Американо7',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-  {
-    id: '7',
-    title: 'Американо8',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-  {
-    id: '8',
-    title: 'Американо9',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-  {
-    id: '9',
-    title: 'Американо10',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-  {
-    id: '10',
-    title: 'Американо11',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-  {
-    id: '11',
-    title: 'Американо12',
-    image: require('../../assets/icon/item_coffee.png'),
-  },
-];
-
 import HeaderMenu from './HeaderMenu';
 import ItemMenu from './ItemMenu';
 
 const Menu = () => {
+  const navigation = useNavigation<NavigationProp<StoreStackParamList>>();
   const [data, setdata] = React.useState<IDataCoffee[]>([]);
+  const idsProduct = useAppSelector(state => state.productsSlice.ids);
+  const dispatch = useAppDispatch();
 
-  const getData = React.useCallback(() => {
-    setTimeout(() => {
-      setdata(dataCoffee);
+  const getData = React.useCallback(async () => {
+    try {
+      const res = await fetch(api.getProduct, {
+        method: 'GET',
+      });
+      const resToJson = await res.json();
+      setdata(resToJson);
+      dispatch(
+        productsReceived({
+          products: resToJson,
+        }),
+      );
       setLoading(false);
-    }, 2000)
+      console.log(resToJson);
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   React.useEffect(() => {
@@ -116,33 +72,50 @@ const Menu = () => {
   return (
     <View style={styles.container}>
       <HeaderMenu />
-      {
-        loading ? (
-          <View style={{
+      {loading ? (
+        <View
+          style={{
             justifyContent: 'center',
-            alignItems: 'center'
-          }}
-          >
-            <ActivityIndicator></ActivityIndicator>
-          </View>
-        ) : (
-          <View style={styles.content}>
-            <FlatList
-              data={data}
-              renderItem={({ item, index }) => {
-                return <ItemMenu item={item} index={index}></ItemMenu>;
-              }}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={styles.contentContainerStyle}
-              ListHeaderComponent={() => {
-                return (
-                  <Text style={styles.listHeaderComponent}>Выберите Ваш кофе</Text>
-                );
-              }}
-              numColumns={2}></FlatList>
-          </View>
-        )
-      }
+            alignItems: 'center',
+          }}>
+          <ActivityIndicator></ActivityIndicator>
+        </View>
+      ) : (
+        <View style={styles.content}>
+          <FlatList
+            data={idsProduct}
+            renderItem={({item, index}) => {
+              return <ItemMenu id={item} index={index}></ItemMenu>;
+            }}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={styles.contentContainerStyle}
+            ListHeaderComponent={() => {
+              return (
+                <Text style={styles.listHeaderComponent}>
+                  Выберите Ваш кофе
+                </Text>
+              );
+            }}
+            numColumns={2}></FlatList>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('CreateProduct');
+            }}
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 100,
+              backgroundColor: 'black',
+              position: 'absolute',
+              bottom: 100,
+              right: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{fontSize: 20, color: '#fff'}}>+</Text>
+          </TouchableOpacity>
+        </View>
+      )}
       {/* <Modal animationType={'slide'} transparent={true}>
         <View
           style={{
